@@ -1,0 +1,142 @@
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  border: solid 1px black;
+  width: 100%;
+  height: 900px;
+  background-color: azure;
+  border-radius: 15px;
+  padding-right: 16px;
+  padding-left: 16px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 40px;
+}
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: solid 1px black;
+  background-color: black;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 5px 0;
+}
+header p a {
+  text-decoration: none;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+}
+.link {
+  border-radius: 20px;
+    padding: 0 10px;
+}
+.link:hover {
+  background-color: #fff;
+  color: black;
+}
+.link.active{
+  color: black;
+  background-color: #fff;
+}
+header p a:hover,.link.active:hover{
+background-color: black;
+color: #fff;
+}
+.main {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.shops {
+width: 30%;
+height: 800px;
+border: solid 1px black;
+border-radius: 10px;
+}
+.shops h1 {
+  margin: 20px 0;
+  text-align: center;
+}
+li {
+  list-style: none;
+}
+.shop {
+margin: 10px 0;
+min-width: 90%;
+padding: 5px 0;
+font-family: Arial, Helvetica, sans-serif;
+font-weight: 800;
+font-size: 24px;
+letter-spacing: 0.3rem;
+color: #fff;
+background-color: black;
+border-radius: 10px;
+}
+.shop.active {
+  color: black;
+    background-color: #fff;
+}
+.shop:hover {
+  color: black;
+  background-color: #fff;
+}
+.food_products {
+  width: 68%;
+  height: 800px;
+  border: solid 1px black;
+  border-radius: 10px 0 0 10px;
+  display: flex;
+  justify-content:flex-start;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+}
+.item {
+  position: relative;
+  height: 300px;
+  border: solid 1px black;
+  margin: 10px;
+  border-radius: 10px;
+  padding: 10px;
+}
+.productCard {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.productName {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 10px;
+}
+.productCard img{
+  width: 200px;
+  height: 150px;
+}
+.price_buy {
+position: absolute;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.price_product {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+.buy {
+  background-color: black;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 20px;
+}
+.buy:hover {
+  background-color: #fff;
+  color: black;
+}
