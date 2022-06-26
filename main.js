@@ -1,7 +1,7 @@
 const products = document.getElementById("food_products");
-// const productsAll = document.querySelectorAll(".food_products");
 const shop = document.getElementById("shop");
 const shops = document.querySelectorAll(".shop");
+const carts = document.getElementById("cart_products");
 const delivery = {
   food: [
     {
@@ -366,16 +366,15 @@ const delivery = {
     },
   ],
   renderProducts(shop) {
-    if (this.cart.items.length === 0) {
-      const store = this.food.filter((item) => item.type === shop);
-      products.innerHTML = "";
-      store.map((product) => {
-        const productCard = `
+    const store = this.food.filter((item) => item.type === shop);
+    products.innerHTML = "";
+    store.map((product) => {
+      const productCard = `
       <div class="item" data-product-id="${product.id}">
       <article class="productCard">
         <img src=${product.img} alt="">
         <h2 class="productName">${product.name}</h2>
-          <div class="price_buy">
+          <div class="price_btn">
             <span class="price_product">${product.price.toFixed(2)}$</span>
             <button class="buy" id="buy" data-id="${
               product.id
@@ -384,9 +383,15 @@ const delivery = {
       </article>
       </div>
       `;
-        products.innerHTML += productCard;
-      });
+      products.innerHTML += productCard;
+    });
+  },
+  changeStore(name, btn) {
+    for (const item of shops) {
+      item.classList.remove("active");
     }
+    btn.classList.add("active");
+    name && this.renderProducts(name);
   },
   cart: {
     items: [],
@@ -395,6 +400,44 @@ const delivery = {
     },
     getLocal() {
       return JSON.parse(localStorage.getItem("cart"));
+    },
+    checkLocal() {
+      const local = this.getLocal();
+      if (local !== null) {
+        this.items = [...local];
+        shops.forEach((item) => {
+          if (item.dataset.shopName === local[0].type) {
+            const nameShop = item.dataset.shopName;
+            delivery.changeStore(nameShop, item);
+            delivery.renderProducts(nameShop);
+          }
+        });
+      }
+    },
+    renderCart() {
+      const local = this.getLocal() || null;
+      if (local !== null) {
+        local.map((product) => {
+          const showCart = `
+          <div class="itemCart" data-product-id="${product.id}">
+      <article class="CardInCart">
+        <img src=${product.img} alt="">
+        <div class="info">
+            <h2 class="productName">${product.name}</h2>
+            <span class="price_cart price_product">${
+              product.price.toFixed(2) * product.quantity
+            }$</span>
+            <button class="remove" id="remove" data-id="${
+              product.id
+            }">Remove</button>
+
+          </div>
+      </article>
+      </div>
+        `;
+          carts.innerHTML += showCart;
+        });
+      }
     },
     add(id) {
       for (const itemInCart of this.items) {
@@ -415,35 +458,34 @@ const delivery = {
     },
     clean() {
       this.items = [];
+      localStorage.clear();
     },
   },
 };
-shop.addEventListener("click", (e) => {
-  function changeStore() {
+// shop
+delivery.cart.checkLocal();
+shop &&
+  shop.addEventListener("click", (e) => {
     const name = e.target.dataset.shopName;
-    for (const item of shops) {
-      item.classList.remove("active");
+    const btnShop = e.target;
+    if (delivery.cart.items.length === 0) {
+      delivery.changeStore(name, btnShop);
+    } else {
+      const us = confirm(
+        "Sorry, delivery from one store is possible, do you want to clear the cart ??"
+      );
+      if (us) {
+        delivery.cart.clean();
+        delivery.changeStore(name, btnShop);
+      }
     }
-    e.target.classList.add("active");
-    name && delivery.renderProducts(name);
-  }
-  if (delivery.cart.items.length === 0) {
-    const name = e.target.dataset.shopName;
-    changeStore();
-  } else {
-    const us = confirm(
-      "Sorry, delivery from one store is possible, do you want to clear the cart ??"
-    );
-    if (us) {
-      delivery.cart.clean();
-      changeStore();
-      delivery.cart.setLocal();
-    }
-  }
-});
-products.addEventListener("click", (e) => {
-  const id = +e.target.dataset.id;
-  delivery.cart.add(id);
-  console.log(delivery.cart.items);
-  delivery.cart.setLocal();
-});
+  });
+products &&
+  products.addEventListener("click", (e) => {
+    const id = +e.target.dataset.id;
+    delivery.cart.add(id);
+    delivery.cart.setLocal();
+  });
+
+//cart
+carts && delivery.cart.renderCart();
