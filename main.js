@@ -596,22 +596,20 @@ const delivery = {
     renderHistory(info) {
       const localHistory = delivery.cart.getLocalHistory();
       orderList.innerHTML = "";
-      localHistory.filter((item) => {
+      const local = localHistory.filter((item) => {
         return item.email == info || item.tel == info;
       });
-      localHistory.map((item, index) => {
+      local.map((item, index) => {
         const product = item.order;
-        console.log(product);
-        console.log(item);
         const showHistory = `
-        <div class="item" >
-
-      <article class="productCard">
+        <div class="item itemHistory" >
+      <article class="historyCard">
         <h2 class="orderHistory">Name: ${item.name}</h2>
         <p class="orderHistory">Phone Number: ${item.tel}</p>
         <p class="orderHistory">Address: ${item.address}</p>
         <p class="orderHistory">Total price: ${item.sum}</p>
-        <p class="orderHistory">Total price: ${item.date.slice(0, 10)}</p>
+        <p class="orderHistory">Email: ${item.email}</p>
+        <p class="orderHistory">Date: ${item.date.slice(0, 10) + ' ' + item.date.slice(11, 16)}</p>
       </article>
       </div>
         `;

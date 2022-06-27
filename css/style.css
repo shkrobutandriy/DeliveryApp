@@ -249,3 +249,7 @@ padding: 0 10px;
     min-width: 200px;
     text-align: center;
 }
+.itemHistory {
+  width: 95%;
+  height: 250px;
+}
