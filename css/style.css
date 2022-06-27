@@ -1,11 +1,15 @@
-
+*{
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: 20px;
+}
 .container {
   max-width: 1140px;
   margin: 0 auto;
   border: solid 1px black;
   width: 100%;
   height: 900px;
-  background-color: azure;
+  background-color: rgb(245, 237, 237);
   border-radius: 15px;
   padding-right: 16px;
   padding-left: 16px;
@@ -26,7 +30,6 @@
 header p a {
   text-decoration: none;
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 30px;
   font-weight: 900;
 }
@@ -84,6 +87,10 @@ border-radius: 10px;
   color: black;
   background-color: #fff;
 }
+.shop:active {
+  color: rgb(253, 253, 253);
+  background-color: black;
+}
 .food_products {
   width: 68%;
   height: 800px;
@@ -101,6 +108,7 @@ border-radius: 10px;
   margin: 10px;
   border-radius: 10px;
   padding: 10px;
+  background-color: #fff;
 }
 .productCard {
   width: 200px;
@@ -117,6 +125,10 @@ border-radius: 10px;
 img{
   width: 200px;
   height: 150px;
+}
+.shopImg {
+  width: 100%;
+  height: auto;
 }
 .price_btn {
 position: absolute;
@@ -136,12 +148,20 @@ position: absolute;
   color: #fff;
   border-radius: 10px;
   font-size: 20px;
+  padding: 0 20px;
+  letter-spacing: 0.1rem;
 }
 .buy:hover {
-  background-color: #fff;
+  background-color: rgb(245, 237, 237);
   color: black;
   font-weight: 800;
-  transition: 0.5s;
+}
+.cartEmty {
+  height: auto;
+  text-align: center;
+  margin-top: 45%;
+  font-size: 36px;
+  font-weight: 800;
 }
 .cart_products {
   width: 68%;
@@ -151,33 +171,81 @@ position: absolute;
     overflow-y: scroll;
 }
 .itemCart {
+  position: relative;
     width: 95%;
     height: 180px;
     border: solid 1px black;
     margin: 10px;
     border-radius: 10px;
     padding: 10px;
+    background-color: #fff;
 }
 .CardInCart {
   display: flex;
 }
 .info {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 .remove {
-  position: absolute;
-  bottom: 0;
-  right: 40%;
-  text-align: center;
-background-color: black;
+ position: absolute;
+  right: 10px;
+  background-color: black;
   color: #fff;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 15px;
+  height: 30px;
+  width: 30px;
+}
+.remove:hover {
+  background-color: #fff;
+    color: black;
+    font-weight: 800;
 }
 .price_cart {
-  display: block;
-  text-align: center;
   margin-top: 10px;
   font-size: 22px;
+}
+.formUsers {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.titleInput {
+margin-left: 10%;
+align-self: flex-start;
+}
+.titleInput:nth-child(1){
+  margin-top: 20px;
+}
+.inputUsers {
+width: 90%;
+border-radius: 10px;
+margin-bottom: 20px;
+height: 30px;
+padding: 0 10px;
+}
+.product_quantity {
+  margin: 0 20px;
+  font-weight: 700;
+  font-size: 24px;
+}
+.mathBtn {
+  border-radius: 50%;
+  width: 30px;
+}
+.submit {
+  width: 80%;
+  margin-top: 40px;
+}
+.price {
+  color: black;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 0.2rem;
+    min-width: 200px;
+    text-align: center;
 }

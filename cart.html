@@ -15,9 +15,47 @@
         <p>
           <a href="cart.html" class="link active">Shoping Cart</a>
         </p>
+        <p><a href="history.html" class="link">History</a></p>
       </header>
       <div class="main">
-        <div class="shops"><h1></h1></div>
+        <form action="#" method="post" class="shops formUsers" id="formUsers">
+          <label class="titleInput" for="">Name</label>
+          <input
+          name="userName"
+          class="inputUsers"
+          type="text"
+          id="userName"
+          placeholder="Name"
+          />
+          <label class="titleInput" for="">Email</label>
+          <input
+            name="userEmail"
+            class="inputUsers"
+            type="email"
+            id="userEmail"
+            placeholder="Email"
+          />
+          <label class="titleInput" for="">Phone number</label>
+          <input
+          name="userTel"
+          class="inputUsers"
+          type="number"
+          id="userTel"
+          placeholder="Phone number"
+          />
+          <label class="titleInput" for="">Address</label>
+          <input
+            name="userAddress"
+            class="inputUsers"
+            type="text"
+            id="userAddress"
+            placeholder="Address"
+          />
+          <span class="price">Total price:</span>
+          <span class="price" id="price">0$</span>
+          <button class="buy submit" id="cleanCart">Clean the cart</button>
+          <button class="buy submit" id="submit">Submit</button>
+        </form>
         <section class="cart_products" id="cart_products"></section>
       </div>
     </div>

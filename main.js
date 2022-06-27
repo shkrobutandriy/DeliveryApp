@@ -2,6 +2,13 @@ const products = document.getElementById("food_products");
 const shop = document.getElementById("shop");
 const shops = document.querySelectorAll(".shop");
 const carts = document.getElementById("cart_products");
+const formUsers = document.getElementById("formUsers");
+const submit = document.getElementById("submit");
+const cleanCart = document.getElementById("cleanCart");
+const price = document.getElementById("price");
+const search = document.getElementById("search");
+const orderList = document.getElementById("orderList");
+
 const delivery = {
   food: [
     {
@@ -395,13 +402,22 @@ const delivery = {
   },
   cart: {
     items: [],
-    setLocal() {
+    orderHistory: [],
+    setLocalItems() {
       localStorage.setItem("cart", JSON.stringify(this.items));
+    },
+    setLocalHistory() {
+      localStorage.setItem("history", JSON.stringify(this.orderHistory));
     },
     getLocal() {
       return JSON.parse(localStorage.getItem("cart"));
     },
+    getLocalHistory() {
+      return JSON.parse(localStorage.getItem("history"));
+    },
     checkLocal() {
+      const localHistory = this.getLocalHistory();
+      if (localHistory !== null) this.orderHistory = [...localHistory];
       const local = this.getLocal();
       if (local !== null) {
         this.items = [...local];
@@ -416,26 +432,36 @@ const delivery = {
     },
     renderCart() {
       const local = this.getLocal() || null;
-      if (local !== null) {
-        local.map((product) => {
+      if (local == null) {
+        carts.innerHTML = `<p class="cartEmty">The cart is empty</p>`;
+      } else if (local !== null) {
+        carts.innerHTML = "";
+        local.map((product, index) => {
           const showCart = `
           <div class="itemCart" data-product-id="${product.id}">
       <article class="CardInCart">
         <img src=${product.img} alt="">
         <div class="info">
             <h2 class="productName">${product.name}</h2>
-            <span class="price_cart price_product">${
-              product.price.toFixed(2) * product.quantity
-            }$</span>
-            <button class="remove" id="remove" data-id="${
-              product.id
-            }">Remove</button>
-
+              <span class="price_cart price_product">${(
+                product.price * product.quantity
+              ).toFixed(2)}$</span>
+              <div>
+              <button id="minus" class="minus mathBtn" data-minus="${
+                product.id
+              }">-</button><span class="product_quantity" id="itemNumber">${
+            product.quantity
+          }</span><button id="plus" class="plus mathBtn" data-plus="${
+            product.id
+          }">+</button>
+          </div>
+            <button class="remove"data-del="${index}">X</button>
           </div>
       </article>
       </div>
         `;
           carts.innerHTML += showCart;
+          this.totalPrice();
         });
       }
     },
@@ -443,6 +469,7 @@ const delivery = {
       for (const itemInCart of this.items) {
         if (itemInCart.id === id) {
           itemInCart.quantity += 1;
+          this.setLocalItems();
           return;
         }
       }
@@ -453,30 +480,164 @@ const delivery = {
             quantity: 1,
           };
           this.items.push(newProduct);
+          this.setLocalItems();
         }
       });
     },
-    clean() {
+    increaseQuantity(id) {
+      this.items.forEach((item) => {
+        if (item.id === id) {
+          item.quantity += 1;
+          this.setLocalItems();
+        }
+      });
+    },
+    decreaseQuantity(id) {
+      this.items.forEach((item, index) => {
+        if (item.id === id && item.quantity > 1) {
+          item.quantity -= 1;
+          this.setLocalItems();
+        } else if (item.id === id && item.quantity <= 1) {
+          this.remove(index);
+        }
+      });
+    },
+    totalPrice() {
+      const order = this.getLocal();
+      if (carts) {
+        if (order !== null) {
+          const result =
+            order
+              .reduce((sum, item) => sum + item.quantity * item.price, 0)
+              .toFixed(2) + "$";
+          price.innerHTML = result;
+          return result;
+        } else {
+          price.innerHTML = 0 + "$";
+        }
+      }
+    },
+    remove(i) {
+      isFinite(i) ? this.items.splice(i, 1) : null;
+      this.setLocalItems();
+      if (this.getLocal().length === 0) {
+        this.cleanCart();
+      }
+    },
+    cleanCart() {
       this.items = [];
-      localStorage.clear();
+      localStorage.removeItem("cart");
+      this.totalPrice();
+    },
+    cleanInput() {
+      const userName = document.getElementById("userName");
+      const userEmail = document.getElementById("userEmail");
+      const userTel = document.getElementById("userTel");
+      const userAddress = document.getElementById("userAddress");
+      userName.value = "";
+      userEmail.value = "";
+      userTel.value = "";
+      userAddress.value = "";
+    },
+    formSave() {
+      const userName = new FormData(formUsers).get("userName");
+      const userEmail = new FormData(formUsers).get("userEmail");
+      const userTel = new FormData(formUsers).get("userTel");
+      const userAddress = new FormData(formUsers).get("userAddress");
+      if (
+        userName == "" ||
+        userEmail == "" ||
+        userTel == "" ||
+        userAddress == ""
+      ) {
+        alert("Fill in the order form");
+        return;
+      } else {
+        const usersOrder = {
+          name: userName,
+          email: userEmail,
+          tel: userTel,
+          address: userAddress,
+        };
+        return usersOrder;
+      }
+    },
+    newOrder() {
+      const user = this.formSave();
+      const order = this.getLocal();
+      if (
+        user &&
+        order &&
+        confirm(
+          `Confirm the order, before payment ${delivery.cart.totalPrice()}`
+        )
+      ) {
+        const newOrder = {
+          ...user,
+          order: order,
+          date: new Date(),
+          sum: delivery.cart.totalPrice(),
+        };
+        this.orderHistory.push(newOrder);
+        this.cleanCart();
+        this.renderCart();
+        this.cleanInput();
+        this.setLocalHistory();
+        carts.innerHTML = `<p class="cartEmty">Thanks for the order, expect a courier. :)</p>`;
+      }
+    },
+  },
+  history: {
+    infoForm() {
+      const searchHistory = document.getElementById("searchHistory");
+      const info = new FormData(searchHistory).get("search");
+      info && this.renderHistory(info);
+    },
+    renderHistory(info) {
+      const localHistory = delivery.cart.getLocalHistory();
+      orderList.innerHTML = "";
+      localHistory.filter((item) => {
+        return item.email == info || item.tel == info;
+      });
+      localHistory.map((item, index) => {
+        const product = item.order;
+        console.log(product);
+        console.log(item);
+        const showHistory = `
+        <div class="item" >
+
+      <article class="productCard">
+        <h2 class="orderHistory">Name: ${item.name}</h2>
+        <p class="orderHistory">Phone Number: ${item.tel}</p>
+        <p class="orderHistory">Address: ${item.address}</p>
+        <p class="orderHistory">Total price: ${item.sum}</p>
+        <p class="orderHistory">Total price: ${item.date.slice(0, 10)}</p>
+      </article>
+      </div>
+        `;
+        orderList.innerHTML += showHistory;
+      });
     },
   },
 };
 // shop
 delivery.cart.checkLocal();
+let activeShop;
 shop &&
   shop.addEventListener("click", (e) => {
     const name = e.target.dataset.shopName;
     const btnShop = e.target;
-    if (delivery.cart.items.length === 0) {
+    if (delivery.cart.items.length === 0 || name == activeShop) {
+      activeShop = name;
       delivery.changeStore(name, btnShop);
     } else {
       const us = confirm(
         "Sorry, delivery from one store is possible, do you want to clear the cart ??"
       );
       if (us) {
-        delivery.cart.clean();
+        delivery.cart.cleanCart();
         delivery.changeStore(name, btnShop);
+        activeShop = name;
       }
     }
   });
@@ -484,8 +645,35 @@ products &&
   products.addEventListener("click", (e) => {
     const id = +e.target.dataset.id;
     delivery.cart.add(id);
-    delivery.cart.setLocal();
   });
 
 //cart
 carts && delivery.cart.renderCart();
+
+carts &&
+  carts.addEventListener("click", (e) => {
+    e.target.dataset.del && delivery.cart.remove(e.target.dataset.del);
+    delivery.cart.increaseQuantity(+e.target.dataset.plus);
+    delivery.cart.decreaseQuantity(+e.target.dataset.minus);
+    delivery.cart.renderCart();
+  });
+carts &&
+  submit.addEventListener("click", (e) => {
+    e.preventDefault();
+    delivery.cart.newOrder();
+  });
+carts &&
+  cleanCart.addEventListener("click", (e) => {
+    e.preventDefault();
+    const confirms = confirm("Are you sure you want to clear the cart?");
+    if (confirms) {
+      delivery.cart.cleanCart();
+      delivery.cart.cleanInput();
+      delivery.cart.renderCart();
+    }
+  });
+search &&
+  search.addEventListener("click", (e) => {
+    e.preventDefault();
+    delivery.history.infoForm();
+  });
