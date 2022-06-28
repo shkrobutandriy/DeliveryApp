@@ -596,15 +596,16 @@ const delivery = {
     renderHistory(info) {
       const localHistory = delivery.cart.getLocalHistory();
       orderList.innerHTML = "";
-      const local = localHistory.filter((item) => {
-        return item.email == info || item.tel == info;
-      });
-      local.map((item, index) => {
-        let ord = '<h2 class="orderHistory">Order</h2>';
-        item.order.map((infoOrder) => {
-          ord += `<li class="orderHistory"><strong>${infoOrder.name}:</strong>${infoOrder.quantity}x${infoOrder.price}</li>`;
+      if (localHistory !== null) {
+        const local = localHistory.filter((item) => {
+          return item.email == info || item.tel == info;
         });
-        const showHistory = `
+        local.map((item, index) => {
+          let ord = '<h2 class="orderHistory">Order</h2>';
+          item.order.map((infoOrder) => {
+            ord += `<li class="orderHistory"><strong>${infoOrder.name}:</strong>${infoOrder.quantity}x${infoOrder.price}</li>`;
+          });
+          const showHistory = `
         <div class="item itemHistory" >
       <article class="userInfo">
         <h2 class="orderHistory">${
@@ -625,8 +626,9 @@ const delivery = {
       </ul>
       </div>
         `;
-        orderList.innerHTML += showHistory;
-      });
+          orderList.innerHTML += showHistory;
+        });
+      }
     },
   },
 };
