@@ -40,15 +40,11 @@ header p a {
   border-radius: 20px;
     padding: 0 10px;
 }
-.link:hover {
+.link:hover, .shop:hover, .link.active, .shop.active {
   background-color: #fff;
   color: black;
 }
-.link.active{
-  color: black;
-  background-color: #fff;
-}
-header p a:hover,.link.active:hover{
+header p a:hover,.link.active:hover,.shop:active{
 background-color: black;
 color: #fff;
 }
@@ -81,18 +77,6 @@ letter-spacing: 0.3rem;
 color: #fff;
 background-color: black;
 border-radius: 10px;
-}
-.shop.active {
-  color: black;
-    background-color: #fff;
-}
-.shop:hover {
-  color: black;
-  background-color: #fff;
-}
-.shop:active {
-  color: rgb(253, 253, 253);
-  background-color: black;
 }
 .food_products {
   width: 68%;
@@ -154,7 +138,7 @@ position: absolute;
   padding: 0 20px;
   letter-spacing: 0.1rem;
 }
-.buy:hover {
+.buy:hover, .remove:hover {
   background-color: rgb(245, 237, 237);
   color: black;
   font-weight: 800;
@@ -202,11 +186,6 @@ position: absolute;
   font-size: 15px;
   height: 30px;
   width: 30px;
-}
-.remove:hover {
-  background-color: #fff;
-    color: black;
-    font-weight: 800;
 }
 .price_cart {
   margin-top: 10px;
