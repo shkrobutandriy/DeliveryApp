@@ -252,4 +252,20 @@ padding: 0 10px;
 .itemHistory {
   width: 95%;
   height: 250px;
+  display: flex;
+  justify-content: space-between;
+}
+.orderInfo, .userInfo {
+width: 48%;
+height: 98%;
+border: solid 1px black;
+border-radius: 10px 0 0 10px ;
+overflow-y: scroll;
+}
+.orderHistory {
+margin-left: 20px;
+margin-bottom: 4px;
+}
+.orderHistory:nth-child(1) {
+  text-align: center;
 }

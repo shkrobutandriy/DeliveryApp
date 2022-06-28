@@ -600,17 +600,29 @@ const delivery = {
         return item.email == info || item.tel == info;
       });
       local.map((item, index) => {
-        const product = item.order;
+        let ord = '<h2 class="orderHistory">Order</h2>';
+        item.order.map((infoOrder) => {
+          ord += `<li class="orderHistory"><strong>${infoOrder.name}:</strong>${infoOrder.quantity}x${infoOrder.price}</li>`;
+        });
         const showHistory = `
         <div class="item itemHistory" >
-      <article class="historyCard">
-        <h2 class="orderHistory">Name: ${item.name}</h2>
-        <p class="orderHistory">Phone Number: ${item.tel}</p>
-        <p class="orderHistory">Address: ${item.address}</p>
-        <p class="orderHistory">Total price: ${item.sum}</p>
-        <p class="orderHistory">Email: ${item.email}</p>
-        <p class="orderHistory">Date: ${item.date.slice(0, 10) + ' ' + item.date.slice(11, 16)}</p>
+      <article class="userInfo">
+        <h2 class="orderHistory">${
+          item.name.slice(0, 1).toUpperCase() + item.name.slice(1)
+        }</h2>
+        <p class="orderHistory"><strong>Phone Number:</strong> ${item.tel}</p>
+        <address class="orderHistory"><strong>Address:</strong> ${
+          item.address
+        }</address>
+        <p class="orderHistory"><strong>Total price:</strong> ${item.sum}</p>
+        <p class="orderHistory"><strong>Email:</strong> ${item.email}</p>
+        <p class="orderHistory"><strong>Date:</strong> ${
+          item.date.slice(0, 10) + " " + item.date.slice(11, 16)
+        }</p>
       </article>
+      <ul class="orderInfo" id="orderInfo">
+        ${ord}
+      </ul>
       </div>
         `;
         orderList.innerHTML += showHistory;
