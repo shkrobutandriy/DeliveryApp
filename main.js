@@ -632,7 +632,6 @@ const delivery = {
     },
   },
 };
-// shop
 delivery.cart.checkLocal();
 let activeShop;
 shop &&
@@ -661,7 +660,6 @@ products &&
 
 //cart
 carts && delivery.cart.renderCart();
-
 carts &&
   carts.addEventListener("click", (e) => {
     e.target.dataset.del && delivery.cart.remove(e.target.dataset.del);
